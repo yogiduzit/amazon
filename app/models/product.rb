@@ -30,6 +30,9 @@ class Product < ApplicationRecord
 
   before_save :set_sale_price
 
+  def hit_it_up
+    hit_count += 1
+  end
   private 
     def no_reserved_words
       if title.downcase.include?("apple") || title.downcase.include?("microsoft")||
