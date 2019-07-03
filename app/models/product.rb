@@ -39,6 +39,10 @@ class Product < ApplicationRecord
 
   before_destroy :destroy_product
 
+  def self.sort_and_filter(search_term, column, current_page, per_page_count)
+    self.search(search_term).order(column).limit(per_page_count).offset((current_page - 1) * per_page_count)
+  end
+
   def hit_it_up
     hit_count += 1
   end
