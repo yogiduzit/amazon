@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get '/products', {to: 'products#index'}
 
   # Get a product with a particular id
-  get '/products/:id', {to: 'products#show', as: 'question'}
+  get '/products/:id', {to: 'products#show', as: 'product'}
 
   # Create new contact
   post('/contact', {to: 'contacts#create'});
