@@ -5,12 +5,11 @@ class ProductsController < ApplicationController
   end
 
   def index
-
     @products = Product.all
   end
 
   def create
-    product = params.require(:product).permit(:title, :description, :price)
+    product = product_params
     if product["price"].to_f != 0.0
       product["price"] = product["price"].to_f
     end
@@ -29,9 +28,30 @@ class ProductsController < ApplicationController
   end
 
   def delete
-    product = Product.find(params["id"])
-    product.destroy
+    @product = Product.find(params["id"])
+    @product.destroy
     redirect_to products_path
+  end
+
+  def edit
+    @product = Product.find(params["id"])
+  end
+
+  def update
+    product = product_params
+    @product = Product.find(params["id"])
+
+    if @product.update product
+      redirect_to product_path(@product)
+    else
+      render :edit
+    end
+  end
+  
+  private
+
+  def product_params
+    params.require(:product).permit(:title, :description, :price)
   end
 
 end

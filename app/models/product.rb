@@ -58,7 +58,7 @@ class Product < ApplicationRecord
 
     def sale_price_check
       if sale_price > price
-        self.errors.add(:sale_price, "must be less than price")
+        # self.errors.add(:sale_price, "must be less than price")
       end
     end
 

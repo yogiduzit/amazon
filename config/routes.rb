@@ -19,11 +19,17 @@ Rails.application.routes.draw do
   # Get a product with a particular id
   get '/products/:id', {to: 'products#show', as: 'product'}
 
+  # Get the product information in form
+  get 'products/:id/edit', {to: 'products#edit', as:'edit_product'}
+
   # Create new contact
   post('/contact', {to: 'contacts#create'});
   
   # Create new product
   post '/products', {to: 'products#create'}
+
+  # Update product
+  patch '/products/:id', {to: 'products#update'}
 
   # Delete a product
   delete '/products/:id', {to: 'products#delete'}
