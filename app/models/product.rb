@@ -23,6 +23,10 @@ class Product < ApplicationRecord
     where("title ILIKE ? OR description ILIKE ?", "%#{name}%", "%#{name}%")
   })
 
+  scope(:find_within_price_range, -> {
+    where("price > ? AND price < ?", 100, 300).order('title').limit(10)
+  })
+
 
   before_validation :capitalize_title
   before_validation :set_default_price
@@ -69,5 +73,5 @@ class Product < ApplicationRecord
     def destroy_product
       puts "Product is about to be destroyed"
     end
-    
+
 end
