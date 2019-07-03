@@ -1,9 +1,9 @@
 <%= link_to 'New Product', products_new_path %>
 
 <% @products.each do |product| %>
-  <div style="border: 1px solid black">
+  <div style="border: 1px solid black; margin-bottom: 10px">
     <h2> <%= link_to product.title, product_path(product)%> </h2>
-    <h3>Price: <%= product.price %>
+    <h3>Price: <%= product.price.round(2).to_s + " $" %>
     <p><%= product.description %></p>
 
   </div>

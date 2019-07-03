@@ -24,4 +24,7 @@ Rails.application.routes.draw do
   
   # Create new product
   post '/products', {to: 'products#create'}
+
+  # Delete a product
+  delete '/products/:id', {to: 'products#delete'}
 end

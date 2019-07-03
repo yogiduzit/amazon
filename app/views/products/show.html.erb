@@ -1,2 +1,4 @@
 <h1><%= @product.title + " : " + @product.price.to_s %></h1>
 <p><%= @product.description %></p>
+<%= link_to "Delete", product_path(@product), method: :delete, data: {confirm: "Are you sure?"} %>
+<link>
