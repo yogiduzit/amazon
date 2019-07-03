@@ -30,10 +30,12 @@ class Product < ApplicationRecord
 
   before_save :set_sale_price
 
+  before_destroy :destroy_product
+
   def hit_it_up
     hit_count += 1
   end
-  
+
   private 
     def no_reserved_words
       if title.downcase.include?("apple") || title.downcase.include?("microsoft")||
@@ -63,4 +65,9 @@ class Product < ApplicationRecord
         sale_price = price
       end
     end
+
+    def destroy_product
+      puts "Product is about to be destroyed"
+    end
+    
 end
