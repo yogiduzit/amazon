@@ -20,7 +20,7 @@ class Product < ApplicationRecord
 
 
 
-  validate :no_reserved_words
+
   
   scope(:search, -> (name) {
     where("title ILIKE ? OR description ILIKE ?", "%#{name}%", "%#{name}%")
@@ -33,9 +33,10 @@ class Product < ApplicationRecord
 
   before_validation :capitalize_title
   before_validation :set_default_price
-  before_validation :sale_price_check
+  before_validation :set_sale_price
 
-  before_save :set_sale_price
+  validate :no_reserved_words
+  validate :sale_price_check
 
   before_destroy :destroy_product
 
@@ -73,7 +74,7 @@ class Product < ApplicationRecord
 
     def set_sale_price
       if sale_price.nil?
-        sale_price = price
+        self.sale_price = price
       end
     end
 
