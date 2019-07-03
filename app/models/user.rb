@@ -14,6 +14,9 @@ class User < ApplicationRecord
     where("first_name NOT ILIKE ? AND last_name NOT ILIKE ?", "john", "john")
   })
 
+  scope(:find_within_date, -> (date1, date2) {
+    where("created_at > ? AND created_at < ?", "#{date1}", "#{date2}")
+  })
 end
 
 
