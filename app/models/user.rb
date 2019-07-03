@@ -1,5 +1,10 @@
 class User < ApplicationRecord
 
+  scope(:strict_search, -> (search) {
+    where("first_name ILIKE ? OR last_name ILIKE ? OR email ILIKE ?", 
+      "#{search}", "#{search}", "#{search}")
+  })
+
   scope(:search, -> (search) {
     where("first_name ILIKE ? OR last_name ILIKE ? OR email ILIKE ?", 
       "%#{search}%", "%#{search}%", "%#{search}%")
@@ -17,6 +22,7 @@ class User < ApplicationRecord
   scope(:find_within_date, -> (date1, date2) {
     where("created_at > ? AND created_at < ?", "#{date1}", "#{date2}")
   })
+
 end
 
 
