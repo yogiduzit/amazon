@@ -7,7 +7,10 @@ class Product < ApplicationRecord
   )
 
   validates(:price,
-    numericality: { greater_than: 0}
+    numericality: { 
+      greater_than: 0,
+      less_than: 100
+    }
   )
   
   validates(:description,
