@@ -1,7 +1,7 @@
 class Product < ApplicationRecord
 
-  has_many :reviews, dependent :destroy
-  
+  has_many :reviews, dependent: :destroy
+
   # Addding validation to prevent any unwanted data values
   validates(:title,
     presence: true,
