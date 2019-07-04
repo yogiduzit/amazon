@@ -3,3 +3,42 @@
 <%= link_to "Delete", product_path(@product), method: :delete, data: {confirm: "Are you sure?"} %>
 <%= link_to "Edit", edit_product_path(@product), method: :get %>
 <link>
+
+
+<%= form_with(model: [@product, @review], local:true) do |f| %>
+  <% if @product.errors.any? %>
+    <ul>
+    <% @product.errors.full_messages.each do |error| %>
+      <li><%= error %></li>
+    <% end %>
+    </ul>
+  <% end %>
+
+  <div class="form-group">
+    <h2>Add Review</h2>
+    <%= f.text_area(
+      :body,
+      cols: 50,
+      rows: 5,
+      placeholder: 'Tell us about the product'
+    )%>
+    <%= f.label :rating%>
+    <%= f.text_field :rating%>
+  </div>
+  <%= f.submit %>
+
+  <% if !@reviews.nil? %>
+    <div class="reviews">
+      <h1>Reviews</h1>
+      <% @reviews.each do |review| %>
+        <div class ="review" style="border: 2px solid black; margin-top: 10px; padding: 10px">
+          <p>Rating - <%= review.rating%></p>
+          <p><%= review.body %></p>
+          <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  </ul>
+<% end %>
