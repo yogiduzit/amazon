@@ -1,5 +1,7 @@
 class Product < ApplicationRecord
 
+  has_many :reviews, dependent :destroy
+  
   # Addding validation to prevent any unwanted data values
   validates(:title,
     presence: true,
@@ -17,10 +19,6 @@ class Product < ApplicationRecord
     presence: true,
     length: { minimum: 10 }
   )
-
-
-
-
   
   scope(:search, -> (name) {
     where("title ILIKE ? OR description ILIKE ?", "%#{name}%", "%#{name}%")
