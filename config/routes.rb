@@ -33,4 +33,8 @@ Rails.application.routes.draw do
 
   # Delete a product
   delete '/products/:id', {to: 'products#delete'}
+
+  resources :products do 
+    resources :reviews, only: [:create, :destroy]
+  end
 end
