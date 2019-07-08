@@ -37,6 +37,7 @@ class Ability
 
     can(:crud, Product) do |product|
       product.user == user
+      
     end
 
     can(:crud, Review) do |review|
