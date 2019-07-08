@@ -1,5 +1,7 @@
 class ProductsController < ApplicationController
 
+  before_action :authenticate_user!
+    
   def new
     @product = Product.new
   end
@@ -9,13 +11,13 @@ class ProductsController < ApplicationController
   end
 
   def create
-    product = product_params
     if product["price"].to_f != 0.0
       product["price"] = product["price"].to_f
     end
     
-    @product = Product.new product
-
+    @product = Product.new product_params
+    @product.user = current_user
+    
     if @product.save
       redirect_to products_path
     else

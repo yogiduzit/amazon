@@ -35,6 +35,7 @@
           <p>Rating - <%= review.rating%></p>
           <p><%= review.body %></p>
           <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
+          <p> Posted by <%= review.user.first_name %> </p>
         </div>
       <% end %>
     </div>

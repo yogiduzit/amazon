@@ -14,6 +14,13 @@
       <a href="/">Home</a>
       <a href="/about">About</a>
       <a href="/contact">Contact Us</a>
+      <% if user_signed_in? %>
+        <h1> Hello <%= current_user.first_name %></h1>
+        <%= link_to "Sign Out", sessions_path, method: :delete, data: {confirm: "Are you sure you want to sign out ?"} %>
+      <% else %>
+        <%= link_to "Sign In", new_sessions_path %>
+        <%= link_to "Sign Up", new_user_path %>
+      <% end %>
     </nav>
     <%= yield %>
   </body>

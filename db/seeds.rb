@@ -8,8 +8,31 @@
 
 Review.delete_all
 Product.delete_all
+User.delete_all
 
-NUM_PRODUCTS = 10000;
+NUM_PRODUCTS = 200
+NUM_USERS = 20
+PASSWORD = "secret"
+
+super_user = User.create(
+  first_name: "Yogesh",
+  last_name: "Verma",
+  email: "itsyog35h@gmail.com",
+  password: PASSWORD
+)
+
+NUM_USERS.times do
+  first_name = Faker::Name.first_name
+  last_name = Faker::Name.last_name
+  User.create(
+    first_name: first_name,
+    last_name: last_name,
+    password: PASSWORD,
+    email: "#{first_name.downcase}.#{last_name.downcase}@example.com"
+  )
+
+end
+users = User.all
 
 NUM_PRODUCTS.times do 
   created_at = Faker::Date.backward(365 * 5)
@@ -21,13 +44,15 @@ NUM_PRODUCTS.times do
     description: Faker::GreekPhilosophers.quote,
     price: price,
     sale_price: sale_price,
-    hit_count: 0
+    hit_count: 0,
+    user: users.sample
   )
   if product.valid?
     product.reviews = rand(0..10).times.map do
       Review.new(
         body: Faker::GreekPhilosophers.quote,
-        rating: rand(1..5)
+        rating: rand(1..5),
+        user: users.sample
         )
       end
   end

@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
 
+  belongs_to :user
   has_many :reviews, dependent: :destroy
 
   # Addding validation to prevent any unwanted data values
