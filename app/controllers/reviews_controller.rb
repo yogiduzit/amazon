@@ -20,9 +20,15 @@ class ReviewsController < ApplicationController
   def destroy
 
     @review = Review.find(params["id"])
-    @review.destroy
 
-    redirect_to product_path(@review.product)
+    if can?(:crud, @review)
+      @review.destroy
+      redirect_to product_path(@review.product)
+    else
+      head :unauthorized
+    end
+
+    
   end
 
   private

@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
 
   before_action :authenticate_user!
+  before_action :authorize!, only: [:update, :edit, :delete]
     
   def new
     @product = Product.new
@@ -17,7 +18,7 @@ class ProductsController < ApplicationController
     
     @product = Product.new product_params
     @product.user = current_user
-    
+
     if @product.save
       redirect_to products_path
     else
@@ -52,6 +53,10 @@ class ProductsController < ApplicationController
     else
       render :edit
     end
+  end
+  
+  def authorize!
+    redirect_to root_path, alert: 'Not Authorized' unless can?(:crud, @product)
   end
   
   private
