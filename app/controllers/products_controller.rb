@@ -12,12 +12,14 @@ class ProductsController < ApplicationController
   end
 
   def create
-    if product["price"].to_f != 0.0
-      product["price"] = product["price"].to_f
-    end
+    
     
     @product = Product.new product_params
     @product.user = current_user
+
+    if @product["price"].to_f != 0.0
+      @product["price"] = @product["price"].to_f
+    end
 
     if @product.save
       redirect_to products_path
@@ -42,6 +44,7 @@ class ProductsController < ApplicationController
 
   def edit
     @product = Product.find(params["id"])
+    render :new
   end
 
   def update
@@ -56,9 +59,10 @@ class ProductsController < ApplicationController
   end
   
   def authorize!
+    @product = Product.find(params["id"])
     redirect_to root_path, alert: 'Not Authorized' unless can?(:crud, @product)
   end
-  
+
   private
 
   def product_params
