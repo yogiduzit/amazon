@@ -1,7 +1,9 @@
 <h1><%= @product.title + " : " + @product.price.to_s %></h1>
 <p><%= @product.description %></p>
-<%= link_to "Delete", product_path(@product), method: :delete, data: {confirm: "Are you sure?"} %>
-<%= link_to "Edit", edit_product_path(@product), method: :get %>
+<% if can?(:crud, @product) %>
+  <%= link_to "Delete", product_path(@product), method: :delete, data: {confirm: "Are you sure?"} %>
+  <%= link_to "Edit", edit_product_path(@product), method: :get %>
+<% end %>
 <link>
 
 
@@ -34,7 +36,9 @@
         <div class ="review" style="border: 2px solid black; margin-top: 10px; padding: 10px">
           <p>Rating - <%= review.rating%></p>
           <p><%= review.body %></p>
-          <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
+          <% if can?(:crud, review) %>
+            <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
+          <% end %>
           <p> Posted by <%= review.user.first_name %> </p>
         </div>
       <% end %>
