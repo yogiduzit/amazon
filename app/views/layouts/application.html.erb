@@ -14,6 +14,8 @@
       <a href="/">Home</a>
       <a href="/about">About</a>
       <a href="/contact">Contact Us</a>
+      <%= link_to "Products", products_path %>
+      <%= link_to "New Product", new_product_path %>
       <% if user_signed_in? %>
         <h1> Hello <%= current_user.first_name %></h1>
         <%= link_to "Sign Out", sessions_path, method: :delete, data: {confirm: "Are you sure you want to sign out ?"} %>

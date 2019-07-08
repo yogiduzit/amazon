@@ -33,14 +33,18 @@
     <div class="reviews">
       <h1>Reviews</h1>
       <% @reviews.each do |review| %>
+      <% if !review.hidden %>
         <div class ="review" style="border: 2px solid black; margin-top: 10px; padding: 10px">
           <p>Rating - <%= review.rating%></p>
           <p><%= review.body %></p>
           <% if can?(:crud, review) %>
             <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
+              
+            <%= link_to("Hide", product_review_path(@product, review) + "/hide", method: :patch)%>
           <% end %>
           <p> Posted by <%= review.user.first_name %> </p>
         </div>
+        <% end %>
       <% end %>
     </div>
   <% end %>
