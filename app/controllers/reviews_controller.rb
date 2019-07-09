@@ -31,20 +31,13 @@ class ReviewsController < ApplicationController
     
   end
 
-  def hide
+  def toggle
     review = Review.find(params["id"])
-    review.hidden = true
+    review.hidden = !review.hidden
     review.save
     redirect_to product_path(review.product.id)
   end
-
-  def unhide
-    review = Review.find(params["id"])
-    review.hidden = false
-    review.save
-    redirect_to product_path(review.product.id)
-  end
-
+  
   private
 
   def review_params
