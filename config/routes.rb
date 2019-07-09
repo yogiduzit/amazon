@@ -42,4 +42,5 @@ Rails.application.routes.draw do
   resource :sessions, only: [:new, :create, :destroy]
 
   patch '/products/:product_id/reviews/:id/hide', {to: 'reviews#hide'}
+  patch '/products/:product_id/reviews/:id/unhide', {to: 'reviews#unhide'}
 end
