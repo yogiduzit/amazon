@@ -16,11 +16,11 @@ class NewsArticlesController < ApplicationController
   end
 
   def show
-    @news_article = NewsArticle.find(params["id"])
+    @news_article = find_news_article_before_actions
   end
 
   def destroy
-    news_article = NewsArticle.find(params["id"])
+    news_article = find_news_article_before_actions
     news_article.destroy
     flash[:notice] = "Deleted an article"
     redirect_to news_articles_path
@@ -33,5 +33,9 @@ class NewsArticlesController < ApplicationController
   private
   def news_article_params
     params.require(:news_article).permit(:title, :description, :like_count)
+  end
+
+  def find_news_article_before_actions
+    NewsArticle.find(params["id"])
   end
 end
