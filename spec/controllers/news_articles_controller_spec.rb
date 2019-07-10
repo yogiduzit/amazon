@@ -95,4 +95,36 @@ RSpec.describe NewsArticlesController, type: :controller do
       expect(response).to render_template(:show)
     end
   end
+
+  describe "#destroy" do
+    def delete_request(news_article)
+      delete(:destroy, params: {
+        id: news_article.id
+      })
+    end
+
+    it "must redirect to index page" do
+      news_article = FactoryBot.create(:news_article)
+      delete_request(news_article)
+      expect(response).to redirect_to news_articles_path
+    end
+
+    it "must remove the particular entry from database" do
+      news_article = FactoryBot.create(:news_article)
+
+      delete_request(news_article)
+
+      # find_by is used instead of find because find gives a runtime
+      # error and could halt the execution.
+      expect(NewsArticle.find_by(id: news_article.id)).to be(nil)
+    end
+
+    it "must flash an error" do
+      news_article = FactoryBot.create(:news_article)
+
+      delete_request(news_article)
+
+      expect(flash[:notice]).to be
+    end
+  end
 end

@@ -40,7 +40,7 @@ Rails.application.routes.draw do
 
   resources :users, only: [:new, :create]
   resource :sessions, only: [:new, :create, :destroy]
-  resources :news_articles, only: [:new, :create, :show]
+  resources :news_articles, only: [:new, :create, :show, :destroy]
 
   patch '/products/:product_id/reviews/:id/hide', {to: 'reviews#toggle'}
   patch '/products/:product_id/reviews/:id/unhide', {to: 'reviews#toggle'}
