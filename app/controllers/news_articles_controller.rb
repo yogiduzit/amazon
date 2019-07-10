@@ -15,6 +15,10 @@ class NewsArticlesController < ApplicationController
 
   end
 
+  def show
+    @news_article = NewsArticle.find(params["id"])
+  end
+
   private
   def news_article_params
     params.require(:news_article).permit(:title, :description, :like_count)

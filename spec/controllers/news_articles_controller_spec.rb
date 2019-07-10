@@ -73,4 +73,26 @@ RSpec.describe NewsArticlesController, type: :controller do
       end
     end
   end
+
+  describe "#show" do
+    it "sets the @news_article variable" do
+      news_article = FactoryBot.create(:news_article)
+
+      get(:show, params: {
+        id: news_article.id
+      })
+
+      expect(assigns(:news_article)).to eq(news_article)
+    end
+
+    it "must render the show page" do
+      news_article = FactoryBot.create(:news_article)
+
+      get(:show, params: {
+        id: news_article.id
+      })
+
+      expect(response).to render_template(:show)
+    end
+  end
 end
