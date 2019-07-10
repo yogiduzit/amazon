@@ -127,4 +127,21 @@ RSpec.describe NewsArticlesController, type: :controller do
       expect(flash[:notice]).to be
     end
   end
+
+  describe "#index" do
+    it "must sort the articles in ascending order" do
+      news_article_a = FactoryBot.create(:news_article)
+      news_article_b = FactoryBot.create(:news_article)
+
+      get(:index)
+
+      expect(assigns(:news_articles)).to eq([news_article_a, news_article_b])
+    end
+
+    it "must render the index view file" do
+      get(:index)
+
+      expect(response).to render_template(:index)
+    end
+  end
 end

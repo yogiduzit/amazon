@@ -26,6 +26,10 @@ class NewsArticlesController < ApplicationController
     redirect_to news_articles_path
   end
 
+  def index
+    @news_articles = NewsArticle.all.order("id ASC")
+  end
+
   private
   def news_article_params
     params.require(:news_article).permit(:title, :description, :like_count)
