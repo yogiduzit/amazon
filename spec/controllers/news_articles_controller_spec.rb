@@ -1,75 +1,111 @@
 require 'rails_helper'
 
 RSpec.describe NewsArticlesController, type: :controller do
+  def current_user
+    @current_user ||= FactoryBot.create(:user) 
+  end
+
   describe "#new" do
-    it "must create a new instance variable" do
 
+    context "without signed in user" do
+      it "must redirect to the sign in page" do
+        get(:new)
+        expect(response).to redirect_to new_sessions_path 
+      end
 
-      get(:new)
-
-      expect(assigns(:news_article)).to be_a_new(NewsArticle)
+      it "sets a danger flash message" do
+        get(:new)
+        expect(flash[:danger]).to be
+      end
     end
 
-    it "must render the new view" do 
-      get(:new)
+    context "with signed in user" do
+      before do
+        session[:user_id] = current_user.id
+      end
+      it "must create a new instance variable" do
+        get(:new)
 
-      expect(response).to render_template(:new)
+        expect(assigns(:news_article)).to be_a_new(NewsArticle)
+      end
+
+      it "must render the new view" do 
+        get(:new)
+
+        expect(response).to render_template(:new)
+      end
     end
   end
 
   describe "#create" do
-    context "valid data" do
 
-      it "must redirect to the show page" do
-        post(:create, params: {
-          news_article: {
-            title: "Yogiduzit",
-            description: "nfjkdnfsmfnsdmfndsm,f sfsdf s  fnsfnds,fnsdf sfbsjkdfnsd fs fksdbf sdfsdhkfbmsd qekw w"
-          }
-        })
+    def valid_request
+      post(:create, params: {
+        news_article: FactoryBot.attributes_for(:news_article)
+      })
+    end
 
-        expect(response).to redirect_to(news_articles_path(NewsArticle.last))
-      end
-
-      it "must create a new entry in the db" do
-        before_create = NewsArticle.count
-
-        post(:create, params: {
-          news_article: {
-            title: "Yogi",
-            description: "nfjkdnfsmfnsdmfndsm,f sfsdf s  fnsfnds,fnsdf sfbsjkdfnsd fs fksdbf sdfsdhkfbmsd qekw w"
-          }
-        })
-        after_create = NewsArticle.count
-
-        expect(after_create).to eq(before_create + 1)
+    context "without user signed in" do
+      it "redirects to sign in page" do
+        valid_request
+        expect(response).to redirect_to new_sessions_path
       end
     end
 
-    context "invalid data" do
-      it "must render the new page" do 
-        post(:create, params: {
-          news_article: {
-            title: nil,
-            description: "nfjkdnfsmfnsdmfndsm,f sfsdf s  fnsfnds,fnsdf sfbsjkdfnsd fs fksdbf sdfsdhkfbmsd qekw w"
-          }
-        })
+    context "with user signed in" do
 
-        expect(response).to(render_template(:new))
+      before do
+        session[:user_id] = current_user.id 
       end
 
-      it "must not add an entry to the db" do
-        before_create = NewsArticle.count
+      context "valid data" do
 
-        post(:create, params: {
-          news_article: {
-            title: nil,
-            description: "nfjkdnfsmfnsdmfndsm,f sfsdf s  fnsfnds,fnsdf sfbsjkdfnsd fs fksdbf sdfsdhkfbmsd qekw w"
-          }
-        })
-        after_create = NewsArticle.count
+        it "must redirect to the show page" do
+          valid_request
 
-        expect(after_create).to eq(before_create)
+          expect(response).to redirect_to(news_articles_path(NewsArticle.last))
+        end
+
+        it "must create a new entry in the db" do
+          before_create = NewsArticle.count
+
+          post(:create, params: {
+            news_article: {
+              title: "Yogi",
+              description: "nfjkdnfsmfnsdmfndsm,f sfsdf s  fnsfnds,fnsdf sfbsjkdfnsd fs fksdbf sdfsdhkfbmsd qekw w"
+            }
+          })
+          after_create = NewsArticle.count
+
+          expect(after_create).to eq(before_create + 1)
+        end
+      end
+
+      context "invalid data" do
+        it "must render the new page" do 
+          post(:create, params: {
+            news_article: {
+              title: nil,
+              description: "nfjkdnfsmfnsdmfndsm,f sfsdf s  fnsfnds,fnsdf sfbsjkdfnsd fs fksdbf sdfsdhkfbmsd qekw w"
+            }
+          })
+
+          expect(response).to(render_template(:new))
+        end
+
+        it "must not add an entry to the db" do
+          before_create = NewsArticle.count
+
+          post(:create, params: {
+            news_article: {
+              title: nil,
+              description: "nfjkdnfsmfnsdmfndsm,f sfsdf s  fnsfnds,fnsdf sfbsjkdfnsd fs fksdbf sdfsdhkfbmsd qekw w"
+            }
+          })
+          after_create = NewsArticle.count
+
+          expect(after_create).to eq(before_create)
+        end
       end
     end
   end
