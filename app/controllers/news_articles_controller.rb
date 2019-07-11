@@ -1,11 +1,14 @@
 class NewsArticlesController < ApplicationController
+
+  before_action :authenticate_user!, only: [:new, :create, :destroy]
+
   def new
     @news_article = NewsArticle.new
   end
 
   def create
     @news_article = NewsArticle.new news_article_params
-
+    @news_article.user = current_user
     if @news_article.valid?
       @news_article.save
       redirect_to news_articles_path(@news_article)

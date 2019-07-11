@@ -1,16 +1,18 @@
 class NewsArticle < ApplicationRecord
 
+  
+
   validates(:title, presence: true, uniqueness: true)
   validates(:description, presence: true)
   validate :compare_publish_date
 
+  belongs_to :user
+
   def titleized
-    p "Yog"
     title.upcase!
   end
 
   def publish
-    p "Yogi"
     published_at = Time.now
   end
 
@@ -23,6 +25,7 @@ class NewsArticle < ApplicationRecord
     if published_at < created_at
       
       errors.messages.add(:published_at, "Publish date cannot be less than creation date")
+
     end
   end
 

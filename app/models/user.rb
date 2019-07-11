@@ -1,5 +1,7 @@
 class User < ApplicationRecord
 
+  has_many(:news_articles, dependent: :nullify)
+
   has_secure_password
 
   validates :first_name, presence: true
