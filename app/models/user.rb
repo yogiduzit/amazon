@@ -1,7 +1,7 @@
 class User < ApplicationRecord
 
   has_many(:news_articles, dependent: :nullify)
-
+  
   has_secure_password
 
   validates :first_name, presence: true
@@ -9,8 +9,11 @@ class User < ApplicationRecord
   validates :password, presence: true
   validates :email, presence: true
 
-  has_many(:products, dependent: :nullify)
+  has_many(:products, dependent: :destroy)
   has_many(:reviews, dependent: :nullify)
+  has_many :reviewed_products, through: :likes, source: :review
+  has_many :likes, dependent: :destroy
+
 
   scope(:strict_search, -> (search) {
     where("first_name ILIKE ? OR last_name ILIKE ? OR email ILIKE ?", 
