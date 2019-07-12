@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
 
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:show, :index]
   before_action :authorize!, only: [:update, :edit, :delete]
     
   def new
@@ -32,7 +32,12 @@ class ProductsController < ApplicationController
     @product = Product.find(params["id"])
     @review = Review.new
 
-    @reviews = @product.reviews.order(created_at: :desc)
+    if can?(:crud, @review)
+      @reviews = @product.reviews.order(created_at: :desc)
+    else
+      @reviews = @product.reviews.where(hidden: false)
+    end
+    
 
   end
 

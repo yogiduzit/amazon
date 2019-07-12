@@ -48,5 +48,9 @@ class Ability
       news_article.user == user
     end
 
+    can(:like, Review) do |review|
+      user.present && review.user == user
+    end
+
   end
 end
