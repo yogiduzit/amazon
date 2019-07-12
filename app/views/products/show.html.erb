@@ -37,36 +37,47 @@
   <div class="reviews">
     <h1>Reviews</h1>
     <% @reviews.each do |review| %>
-      <% if can?(:crud, review) %>
-        <% if !review.hidden %>
-          <div class ="review" style="border: 2px solid black; margin-top: 10px; padding: 10px">
-            <p>Rating - <%= review.rating%></p>
-            <p><%= review.body %></p>
-            <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
-                
-            <%= link_to("Hide", product_review_path(@product, review) + "/hide", method: :patch)%>
-            <%= link_to("Unhide", product_review_path(@product, review) + "/unhide", method: :patch)%>
-            <p> Posted by <%= review.user.first_name %> </p>
-          </div>
-        <% else %>
-          <div class ="review" style="border: 2px solid black; margin-top: 10px; padding: 10px; background-color: grey">
-            <p>Rating - <%= review.rating%></p>
-            <p><%= review.body %></p>
-            <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
-                
-            <%= link_to("Hide", product_review_path(@product, review) + "/unhide", method: :patch)%>
-            <%= link_to("Unhide", product_review_path(@product, review) + "/unhide", method: :patch)%>
-            <p> Posted by <%= review.user.first_name %> </p>
-          </div>
-        <% end %>
+      <% if !review.hidden %>
+        <div class ="review" style="border: 2px solid black; margin-top: 10px; padding: 10px">
+          <p>Rating - <%= review.rating%></p>
+          <p><%= review.body %></p>
+          <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
+          <% if can?(:crud, review)%>
+            <%= link_to("Hide", product_review_path(@product, review) + "/toggle", method: :patch)%>
+            <%= link_to("Unhide", product_review_path(@product, review) + "/toggle", method: :patch)%>
+          <% end %>
+
+          <% like = review.likes.find_by(user_id: current_user.id) %>
+          <% if like.present? %>
+            <%= link_to "Unlike", product_review_like_path(@product, review, like), method: :delete%>
+          <% else %>
+            <%= link_to "Like", product_review_likes_path(@product, review), method: :post%>
+          <% end %>
+          <p> Likes: <%= review.likes.count%> </p>
+          <p> Posted by <%= review.user.first_name %> </p>
+          
+        </div>
       <% else %>
-        <% if !review.hidden %>
-          <div class ="review" style="border: 2px solid black; margin-top: 10px; padding: 10px">
-            <p>Rating - <%= review.rating%></p>
-            <p><%= review.body %></p>
-            <p> Posted by <%= review.user.first_name %> </p>
-          </div>
-        <% end %>
+        <div class ="review" style="border: 2px solid black; margin-top: 10px; padding: 10px; background-color: grey">
+          <p>Rating - <%= review.rating %></p>
+          <p><%= review.body %></p>
+          <% if can?(:crud, review) %>
+            <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
+          <% end %>
+
+          <% if can?(:crud, @product)%>
+            <%= link_to("Hide", product_review_path(@product, review) + "/toggle", method: :patch)%>
+            <%= link_to("Unhide", product_review_path(@product, review) + "/toggle", method: :patch)%>
+          <% end %>
+
+          <% like = review.likes.find_by(user: current_user) %>
+          <% if like.present? %>
+            <%= link_to "Unlike", product_review_like_path(@product, review, like), method: :delete%>
+          <% else %>
+            <%= link_to "Like", product_review_likes_path(@product, review), method: :post%>
+          <% end %>
+          <p> Posted by <%= review.user.first_name %> </p>
+        </div>
       <% end %>
     <% end %>
   </div>
