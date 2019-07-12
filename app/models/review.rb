@@ -2,6 +2,8 @@ class Review < ApplicationRecord
 
   belongs_to :product
   belongs_to :user
+  has_many :reviewers, through: :likes, source: :user
+  has_many :likes, dependent: :destroy
   
   validates(:rating, 
     numericality: {
