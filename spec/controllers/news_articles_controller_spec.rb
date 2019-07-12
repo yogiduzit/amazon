@@ -69,12 +69,7 @@ RSpec.describe NewsArticlesController, type: :controller do
         it "must create a new entry in the db" do
           before_create = NewsArticle.count
 
-          post(:create, params: {
-            news_article: {
-              title: "Yogi",
-              description: "nfjkdnfsmfnsdmfndsm,f sfsdf s  fnsfnds,fnsdf sfbsjkdfnsd fs fksdbf sdfsdhkfbmsd qekw w"
-            }
-          })
+          valid_request
           after_create = NewsArticle.count
 
           expect(after_create).to eq(before_create + 1)
@@ -82,13 +77,16 @@ RSpec.describe NewsArticlesController, type: :controller do
       end
 
       context "invalid data" do
-        it "must render the new page" do 
+        def invalid_request
           post(:create, params: {
             news_article: {
               title: nil,
               description: "nfjkdnfsmfnsdmfndsm,f sfsdf s  fnsfnds,fnsdf sfbsjkdfnsd fs fksdbf sdfsdhkfbmsd qekw w"
             }
           })
+        end
+        it "must render the new page" do 
+          invalid_request
 
           expect(response).to(render_template(:new))
         end
@@ -96,12 +94,7 @@ RSpec.describe NewsArticlesController, type: :controller do
         it "must not add an entry to the db" do
           before_create = NewsArticle.count
 
-          post(:create, params: {
-            news_article: {
-              title: nil,
-              description: "nfjkdnfsmfnsdmfndsm,f sfsdf s  fnsfnds,fnsdf sfbsjkdfnsd fs fksdbf sdfsdhkfbmsd qekw w"
-            }
-          })
+          invalid_request
           after_create = NewsArticle.count
 
           expect(after_create).to eq(before_create)
@@ -113,7 +106,6 @@ RSpec.describe NewsArticlesController, type: :controller do
   describe "#show" do
     it "sets the @news_article variable" do
       news_article = FactoryBot.create(:news_article)
-
       get(:show, params: {
         id: news_article.id
       })
@@ -139,23 +131,46 @@ RSpec.describe NewsArticlesController, type: :controller do
       })
     end
 
-    it "must redirect to index page" do
-      news_article = FactoryBot.create(:news_article)
-      delete_request(news_article)
-      expect(response).to redirect_to news_articles_path
+    context "if user not signed in" do 
+      it "redirects to sign in page" do
+        news_article = FactoryBot.create(:news_article)
+        delete_request(news_article)
+        expect(response).to redirect_to new_sessions_path  
+      end
     end
 
-    it "must remove the particular entry from database" do
-      news_article = FactoryBot.create(:news_article)
+    context "if user signed in" do 
+      before do
+        session[:user_id] = current_user.id
+      end
+      
+      context "as owner" do
 
-      delete_request(news_article)
+        it "must remove the particular entry from database" do
+          news_article = FactoryBot.create(:news_article)
+          news_article.user = current_user
+    
+          delete_request(news_article)
+    
+          # find_by is used instead of find because find gives a runtime
+          # error and could halt the execution.
+          expect(NewsArticle.find_by(id: news_article.id)).to be(nil)
+        end
 
-      # find_by is used instead of find because find gives a runtime
-      # error and could halt the execution.
-      expect(NewsArticle.find_by(id: news_article.id)).to be(nil)
+        it "must redirect to index page" do
+          news_article = FactoryBot.create(:news_article)
+          delete_request(news_article)
+          expect(response).to redirect_to news_articles_path
+        end
+      end
+      context "user not an owner" do
+      end
     end
 
-    it "must flash an error" do
+
+
+
+    it "must flash a warning" do
       news_article = FactoryBot.create(:news_article)
 
       delete_request(news_article)
@@ -178,6 +193,72 @@ RSpec.describe NewsArticlesController, type: :controller do
       get(:index)
 
       expect(response).to render_template(:index)
+    end
+  end
+
+  describe "#edit" do
+    def valid_request(news_article) 
+      get(:edit, params: {
+        id: news_article.id
+      })
+    end
+    context "without signed in" do
+      it "redirects to sign in page" do
+        news_article = FactoryBot.create(:news_article)
+        valid_request(news_article)
+        expect(response).to redirect_to new_sessions_path  
+      end
+    end
+
+    context "with signed in" do 
+
+      before do
+        session[:user_id] = current_user.id
+      end
+
+      it "must load a news article from database" do
+        news_article = FactoryBot.create(:news_article)
+        valid_request(news_article)
+        expect(assigns(:news_article)).to eq(news_article) 
+      end
+  
+      it "must render the edit view" do
+        news_article = FactoryBot.create(:news_article)
+  
+        valid_request(news_article)
+  
+        expect(response).to render_template(:edit)
+      end
+    end
+
+  end
+
+  describe "#update" do
+    def valid_request(news_article)
+      patch(:update, params: {
+        news_article: FactoryBot.attributes_for(:news_article),
+        id: news_article.id
+      })
+    end
+
+    context "without signed in" do
+      it "redirects to sign in page" do
+        news_article = FactoryBot.create(:news_article)
+        valid_request(news_article)
+        expect(response).to redirect_to new_sessions_path  
+      end
+    end
+
+    context "with signed in" do
+      before do
+        session[:user_id] = current_user.id
+      end
+
+      it "redirects to show page" do
+        news_article = FactoryBot.create(:news_article)
+        valid_request(news_article)
+        expect(response).to redirect_to news_article_path(news_article)
+      end
     end
   end
 end
