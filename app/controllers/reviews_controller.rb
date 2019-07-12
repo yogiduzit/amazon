@@ -1,6 +1,7 @@
 class ReviewsController < ApplicationController
 
   before_action :authenticate_user! 
+  before_action :authorize!, only: [:update, :destroy]
   def create
 
     @review = Review.new review_params
@@ -20,13 +21,9 @@ class ReviewsController < ApplicationController
   def destroy
 
     @review = Review.find(params["id"])
+    @review.destroy
+    redirect_to product_path(@review.product)
 
-    if can?(:crud, @review)
-      @review.destroy
-      redirect_to product_path(@review.product)
-    else
-      head :unauthorized
-    end
 
     
   end
@@ -39,9 +36,14 @@ class ReviewsController < ApplicationController
   end
   
   private
-
   def review_params
     params.require('review').permit(:body, :rating)
+  end
+
+  def authorize!
+    @review = Review.find_by(id: params["id"])
+    redirect_to product_path(@review.product), alert: 'Not Authorized' unless can?(:crud, @review)
+    
   end
 
 end
