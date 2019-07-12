@@ -35,13 +35,14 @@ Rails.application.routes.draw do
   delete '/products/:id', {to: 'products#delete'}
 
   resources :products do 
-    resources :reviews, only: [:create, :destroy]
+    resources :reviews, only: [:create, :destroy] do
+      resources :likes, only: [:create, :destroy]
+      end
   end
 
   resources :users, only: [:new, :create]
   resource :sessions, only: [:new, :create, :destroy]
   resources :news_articles, only: [:new, :create, :show, :destroy, :index, :edit, :update]
 
-  patch '/products/:product_id/reviews/:id/hide', {to: 'reviews#toggle'}
-  patch '/products/:product_id/reviews/:id/unhide', {to: 'reviews#toggle'}
+  patch '/products/:product_id/reviews/:id/toggle', {to: 'reviews#toggle'}
 end
