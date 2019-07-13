@@ -5,6 +5,12 @@
     <%= link_to "Delete", product_path(@product), method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-primary" %>
     <%= link_to "Edit", edit_product_path(@product), method: :get, class: "btn btn-danger" %>
   <% end %>
+  <% fav = @product.favourites.find_by(user: current_user) %>
+  <% if fav.present? %>
+    <%= link_to "Remove from favourites", product_favourite_path(@product, fav), method: :delete, class: "btn btn-danger"%>
+  <% else %>
+    <%= link_to "Add to favourites", product_favourites_path(@product), method: :post, class: "btn btn-primary"%>
+  <% end %>
 </div>
 
 <div class="form-container p-3">
