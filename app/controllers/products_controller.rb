@@ -32,7 +32,7 @@ class ProductsController < ApplicationController
     @product = Product.find(params["id"])
     @review = Review.new
 
-    if can?(:crud, @review)
+    if can?(:crud, @product)
       @reviews = @product.reviews.order(created_at: :desc)
     else
       @reviews = @product.reviews.where(hidden: false)

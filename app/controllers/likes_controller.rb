@@ -2,8 +2,8 @@ class LikesController < ApplicationController
   before_action :authenticate_user!
   def create
     like = create_like
-
-    if !can?(:like, like) 
+    review = like.review
+    if !can?(:like, review) 
       flash[:error] = "Liking your own message"
       return redirect_to product_path(like.review.product)
     end
