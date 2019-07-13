@@ -1,0 +1,9 @@
+<h2>My favourite products</h2>
+<% @fav_products.each do |product| %>
+  <div style="border: 1px solid black; margin-bottom: 10px">
+    <h2> <%= link_to product.title, product_path(product)%> </h2>
+    <h3>Price: <%= product.price.round(2).to_s + " $" %>
+    <p><%= product.description %></p>
+    <p> Posted by <%= product.user.first_name %> </p>
+  <% end%>
+  </div>

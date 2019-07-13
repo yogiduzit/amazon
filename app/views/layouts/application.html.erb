@@ -36,6 +36,9 @@
           <li class="nav-item">
             <%= link_to "Sign Out", sessions_path, method: :delete, data: {confirm: "Are you sure you want to sign out ?"} %>
           </li>
+          <li class="nav-item">
+            <%= link_to "Favourites", favourites_path, class: "nav-link" %>
+          </li>
         <% else %>
           <li class="nav-item">
             <%= link_to "Sign In", new_sessions_path ,class: "nav-link" %>
