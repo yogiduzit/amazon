@@ -9,10 +9,12 @@ class User < ApplicationRecord
   validates :password, presence: true
   validates :email, presence: true
 
-  has_many(:products, dependent: :destroy)
-  has_many(:reviews, dependent: :nullify)
-  has_many :reviewed_products, through: :likes, source: :review
+  has_many :products, dependent: :destroy
+  has_many :reviews, dependent: :nullify
+  
+  has_many :liked_reviews, through: :likes, source: :review
   has_many :likes, dependent: :destroy
+
 
 
   scope(:strict_search, -> (search) {

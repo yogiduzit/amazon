@@ -2,6 +2,7 @@ class Product < ApplicationRecord
 
   belongs_to :user
   has_many :reviews, dependent: :destroy
+  has_many :favouriters, through: :favourites, source: :user
 
   # Addding validation to prevent any unwanted data values
   validates(:title,
