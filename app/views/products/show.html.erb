@@ -41,13 +41,15 @@
         <div class ="review" style="border: 2px solid black; margin-top: 10px; padding: 10px">
           <p>Rating - <%= review.rating%></p>
           <p><%= review.body %></p>
-          <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
-          <% if can?(:crud, review)%>
-            <%= link_to("Hide", product_review_path(@product, review) + "/toggle", method: :patch)%>
-            <%= link_to("Unhide", product_review_path(@product, review) + "/toggle", method: :patch)%>
+          <% if can?(:crud, review) %>
+            <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
           <% end %>
 
-          <% like = review.likes.find_by(user_id: current_user.id) %>
+          <% if can?(:crud, @product)%>
+            <%= link_to("Hide", product_review_path(@product, review) + "/toggle", method: :patch)%>
+          <% end %>
+
+          <% like = review.likes.find_by(user: current_user) %>
           <% if like.present? %>
             <%= link_to "Unlike", product_review_like_path(@product, review, like), method: :delete%>
           <% else %>
@@ -66,7 +68,6 @@
           <% end %>
 
           <% if can?(:crud, @product)%>
-            <%= link_to("Hide", product_review_path(@product, review) + "/toggle", method: :patch)%>
             <%= link_to("Unhide", product_review_path(@product, review) + "/toggle", method: :patch)%>
           <% end %>
 
@@ -76,6 +77,7 @@
           <% else %>
             <%= link_to "Like", product_review_likes_path(@product, review), method: :post%>
           <% end %>
+          <p> Likes: <%= review.likes.count%> </p>
           <p> Posted by <%= review.user.first_name %> </p>
         </div>
       <% end %>

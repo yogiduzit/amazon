@@ -49,7 +49,7 @@ class Ability
     end
 
     can(:like, Review) do |review|
-      user.present && review.user == user
+      user.present? && review.user != user
     end
 
   end
