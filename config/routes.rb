@@ -37,8 +37,11 @@ Rails.application.routes.draw do
   resources :products do 
     resources :reviews, only: [:create, :destroy] do
       resources :likes, only: [:create, :destroy]
-      end
+    end
+    resources :favourites, only: [:create, :destroy]
   end
+
+  get '/favourites', {to: 'favourites#index', as: "favourites"}
 
   resources :users, only: [:new, :create]
   resource :sessions, only: [:new, :create, :destroy]
