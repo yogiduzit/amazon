@@ -6,12 +6,17 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+Tagging.delete_all
+Tag.delete_all
+Like.delete_all
+Favourite.delete_all
 Review.delete_all
 Product.delete_all
 User.delete_all
 
 NUM_PRODUCTS = 200
 NUM_USERS = 20
+NUM_TAGS = 10
 PASSWORD = "secret"
 
 super_user = User.create(
@@ -57,9 +62,23 @@ NUM_PRODUCTS.times do
       end
   end
 end
+
+NUM_TAGS.times do
+  tag_name = Faker::Military.army_rank
+  Tag.create(
+    name: tag_name
+  )
+end
+
   products = Product.all
+  users = User.all
+  reviews = Review.all
+  tags = Tag.all
 
   puts Cowsay.say("Generated #{products.count} products", :frogs)
+  puts Cowsay.say("Generated #{users.count} products", :frogs)
+  puts Cowsay.say("Generated #{reviews.count} products", :frogs)
+  puts Cowsay.say("Generated #{tags.count} products", :frogs)
 
 
 
