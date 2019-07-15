@@ -1,0 +1,9 @@
+<% if !@tags.nil? %>
+  <div class="tags-container">
+    <% @tags.each do |tag| %>
+      <div class="tag-container">
+        <%= link_to tag.name, tag_products_path(tag), class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
