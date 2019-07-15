@@ -41,6 +41,9 @@ Rails.application.routes.draw do
     resources :favourites, only: [:create, :destroy]
   end
 
+  get '/tags', {to: 'tags#index', as: "tags"}
+  get '/tags/:tag_id/products', {to: 'tags#show', as: "tag_products"}
+
   get '/favourites', {to: 'favourites#index', as: "favourites"}
 
   resources :users, only: [:new, :create]
