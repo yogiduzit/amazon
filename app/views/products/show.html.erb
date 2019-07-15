@@ -1,6 +1,8 @@
 <div class="product-container p-3">
   <h2 class="h2"><%= @product.title + " : " + @product.price.to_s %></h1>
   <p><%= @product.description %></p>
+
+  
   <% if can?(:crud, @product) %>
     <%= link_to "Delete", product_path(@product), method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-primary" %>
     <%= link_to "Edit", edit_product_path(@product), method: :get, class: "btn btn-danger" %>
@@ -12,6 +14,17 @@
     <%= link_to "Add to favourites", product_favourites_path(@product), method: :post, class: "btn btn-primary"%>
   <% end %>
 </div>
+
+<% if !@tags.nil? %>
+    <div class="tags-wrapper">
+      <h1>Tags</h1>
+      <% @tags.each do |tag| %>
+        <div class="tag-wrapper">
+          <p class="btn btn-secondary"><%= tag.name %></p>
+        </div>
+      <% end %>
+    </div>
+<% end %>
 
 <div class="form-container p-3">
   <%= form_with(model: [@product, @review], local:true) do |f| %>

@@ -31,6 +31,7 @@ class ProductsController < ApplicationController
   def show
     @product = Product.find(params["id"])
     @review = Review.new
+    @tags = @product.tags
 
     if can?(:crud, @product)
       @reviews = @product.reviews.order(created_at: :desc)
@@ -71,7 +72,7 @@ class ProductsController < ApplicationController
   private
 
   def product_params
-    params.require(:product).permit(:title, :description, :price)
+    params.require(:product).permit(:title, :description, :price, {tag_ids: []})
   end
 
 end

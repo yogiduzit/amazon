@@ -21,5 +21,13 @@
     <%= f.label :price %>
     <%= f.text_field :price %>
   </div>
+  <div class="tags-wrapper">
+    <%= f.collection_check_boxes :tag_ids, Tag.all, :id, :name do |b|%>
+      <div class="tag-wrapper">
+        <%= b.check_box %>
+        <%= b.text.humanize %>
+       </div>
+    <% end%>
+  </div>
   <%= f.submit %>
 <% end %>
