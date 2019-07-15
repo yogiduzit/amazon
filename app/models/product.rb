@@ -4,8 +4,10 @@ class Product < ApplicationRecord
 
   has_many :reviews, dependent: :destroy
   has_many :favourites, dependent: :destroy
+  has_many :taggings, dependent: :destroy
   
   has_many :favouriters, through: :favourites, source: :user
+  has_many :tags, through: :taggings
   
 
   # Addding validation to prevent any unwanted data values
