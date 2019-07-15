@@ -1,3 +1,14 @@
 // Place all the styles related to the products controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.tags-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+.tag-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
