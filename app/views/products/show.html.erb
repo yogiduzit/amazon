@@ -54,52 +54,54 @@
 
 <% if !@reviews.nil? %>
   <div class="reviews">
-    <h1>Reviews</h1>
+    <h1 class="reviews-heading">Reviews</h1>
     <% @reviews.each do |review| %>
-      <% if !review.hidden %>
-        <div class ="review" style="border: 2px solid black; margin-top: 10px; padding: 10px">
-          <p>Rating - <%= review.rating%></p>
-          <p><%= review.body %></p>
-          <% if can?(:crud, review) %>
-            <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
-          <% end %>
-
-          <% if can?(:crud, @product)%>
-            <%= link_to("Hide", product_review_path(@product, review) + "/toggle", method: :patch)%>
-          <% end %>
-
-          <% like = review.likes.find_by(user: current_user) %>
-          <% if like.present? %>
-            <%= link_to "Unlike", product_review_like_path(@product, review, like), method: :delete%>
-          <% else %>
-            <%= link_to "Like", product_review_likes_path(@product, review), method: :post%>
-          <% end %>
-          <p> Likes: <%= review.likes.count%> </p>
+      <div class ="review <%= "hidden" if review.hidden %>" style="border: 2px solid black; margin-top: 10px; padding: 10px">
+        <div class="review-header">
           <p> Posted by <%= review.user.first_name %> </p>
+          <p> Likes: <%= review.likes.count%> </p>
+          <p>Rating - <%= review.rating%></p>
+        </div>
+        <div class="review-body">
+          <p><%= review.body %></p>
           
         </div>
-      <% else %>
-        <div class ="review" style="border: 2px solid black; margin-top: 10px; padding: 10px; background-color: grey">
-          <p>Rating - <%= review.rating %></p>
-          <p><%= review.body %></p>
-          <% if can?(:crud, review) %>
-            <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
-          <% end %>
+        <div class="buttons-container">
+        <% if can?(:crud, review) %>
+          <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
+        <% end %>
 
-          <% if can?(:crud, @product)%>
-            <%= link_to("Unhide", product_review_path(@product, review) + "/toggle", method: :patch)%>
-          <% end %>
+        <% if can?(:crud, @product)%> 
+          <%= link_to("Hide", product_review_path(@product, review) + "/toggle", method: :patch) if !review.hidden%>
+          <%= link_to("Unhide", product_review_path(@product, review) + "/toggle", method: :patch) if review.hidden%>
+          
+        <% end %>
 
-          <% like = review.likes.find_by(user: current_user) %>
-          <% if like.present? %>
-            <%= link_to "Unlike", product_review_like_path(@product, review, like), method: :delete%>
-          <% else %>
-            <%= link_to "Like", product_review_likes_path(@product, review), method: :post%>
-          <% end %>
-          <p> Likes: <%= review.likes.count%> </p>
-          <p> Posted by <%= review.user.first_name %> </p>
+        
+        <% like = review.likes.find_by(user: current_user) %>
+        <% if like.present? %>
+          <%= link_to "Unlike", product_review_like_path(@product, review, like), method: :delete, class: "btn btn-warning"%>
+        <% else %>
+          <%= link_to "Like", product_review_likes_path(@product, review), method: :post, class: "btn btn-success"%>
+        <% end %>
         </div>
-      <% end %>
+        <div class="votes-container">
+          <% vote = review.votes.find_by(user: current_user)%>
+          <div class="buttons-container">
+            <% if vote.nil? %>
+              <%= link_to "Upvote", product_review_votes_path(@product, review) + "/up", method: :post, class: "btn btn-success" %>
+              <%= link_to "Downvote", product_review_votes_path(@product, review) + "/down", method: :post, class: "btn btn-warning" %>
+            <% else %>
+              <%= link_to "Upvote", product_review_vote_path(@product, review, vote) + "/up", method: :patch, class: "btn btn-success"%>
+              <%= link_to "Downvote", product_review_vote_path(@product, review, vote) + "/down", method: :patch, class: "btn btn-warning"%>
+            <% end %>
+          </div>
+          <div class="vote-content">
+            <p>Upvotes <%= review.votes.where(vote_type: "up").count %></p>
+            <p>Downvotes <%= review.votes.where(vote_type: "down").count %></p>
+          </div>
+        </div>
+      </div>
     <% end %>
   </div>
 <% end %>
