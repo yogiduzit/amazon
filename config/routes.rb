@@ -55,4 +55,9 @@ Rails.application.routes.draw do
   resources :news_articles, only: [:new, :create, :show, :destroy, :index, :edit, :update]
 
   patch '/products/:product_id/reviews/:id/toggle', {to: 'reviews#toggle'}
+
+  match("/delayed_jobs", 
+    to: DelayedJobWeb,
+    anchor: false,
+    via: [:get, :post])
 end
