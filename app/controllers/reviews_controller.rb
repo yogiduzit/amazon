@@ -12,6 +12,7 @@ class ReviewsController < ApplicationController
     
 
     if @review.save
+      ReviewMailer.new_review(@review).deliver_later
       redirect_to product_path(@product)
     else
       render 'products/show'
