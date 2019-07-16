@@ -34,9 +34,10 @@ class ProductsController < ApplicationController
     @tags = @product.tags
 
     if can?(:crud, @product)
-      @reviews = @product.reviews.order(created_at: :desc)
+      # @reviews = @product.reviews.joins(:votes).where("votes.vote_type = 'up'")
+      @reviews =  @product.reviews.joins(:votes).where(votes: { vote_type: "up" }).group("reviews.id").order("COUNT(votes.*) DESC")
     else
-      @reviews = @product.reviews.where(hidden: false)
+      @reviews = Product.first.reviews.joins(:votes).where(votes: { vote_type: "up" }, reviews: {hidden: false}).group("reviews.id").order("COUNT(votes.*) DESC")
     end
     
 
@@ -74,5 +75,6 @@ class ProductsController < ApplicationController
   def product_params
     params.require(:product).permit(:title, :description, :price, {tag_ids: []})
   end
-
+"SELECT * FROM reviews INNER JOIN products ON products.id = reviews.id INNER JOIN votes ON reviews.id = votes.review_id"
+"SELECT count(*) FROM reviews INNER JOIN products ON products.id = reviews.id INNER JOIN votes ON reviews.id = votes.review_id WHERE votes.type=\"up\""
 end
