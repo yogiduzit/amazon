@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_15_201642) do
+ActiveRecord::Schema.define(version: 2019_07_15_214433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,16 @@ ActiveRecord::Schema.define(version: 2019_07_15_201642) do
     t.string "password_digest"
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.string "vote_type"
+    t.bigint "user_id"
+    t.bigint "review_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["review_id"], name: "index_votes_on_review_id"
+    t.index ["user_id"], name: "index_votes_on_user_id"
+  end
+
   add_foreign_key "favourites", "products"
   add_foreign_key "favourites", "users"
   add_foreign_key "likes", "reviews"
@@ -101,4 +111,6 @@ ActiveRecord::Schema.define(version: 2019_07_15_201642) do
   add_foreign_key "reviews", "users"
   add_foreign_key "taggings", "products"
   add_foreign_key "taggings", "tags"
+  add_foreign_key "votes", "reviews"
+  add_foreign_key "votes", "users"
 end
