@@ -1,4 +1,6 @@
 class ProductMailer < ApplicationMailer
+
+  # This will open the hello world view
   def hello_world
     mail(
       to: "itsyog35h@gmail.com",

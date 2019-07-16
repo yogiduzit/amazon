@@ -22,6 +22,7 @@ class ProductsController < ApplicationController
     end
 
     if @product.save
+      ProductMailer.new_product(@product).deliver_later
       redirect_to products_path
     else
       render :new
