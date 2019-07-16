@@ -36,9 +36,13 @@ class ProductsController < ApplicationController
 
     if can?(:crud, @product)
       # @reviews = @product.reviews.joins(:votes).where("votes.vote_type = 'up'")
-      @reviews =  @product.reviews.joins(:votes).where(votes: { vote_type: "up" }).group("reviews.id").order("COUNT(votes.*) DESC")
+      @reviews =  @product.reviews.joins(:votes).where(votes: { vote_type: "up" }).group("reviews.id").order("COUNT(votes.*) DESC") 
+      
+      @reviews = @product.reviews if @reviews.length <= 0
     else
-      @reviews = Product.first.reviews.joins(:votes).where(votes: { vote_type: "up" }, reviews: {hidden: false}).group("reviews.id").order("COUNT(votes.*) DESC")
+      @reviews = @product.reviews.joins(:votes).where(votes: { vote_type: "up" }, reviews: {hidden: false}).group("reviews.id").order("COUNT(votes.*) DESC")
+      
+      @reviews = @product.reviews.where(hidden: false) if @reviews.length <= 0
     end
     
 
