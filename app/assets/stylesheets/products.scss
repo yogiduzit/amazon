@@ -2,13 +2,58 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.tags-wrapper {
+%d-flex-r-w {
   display: flex;
   flex-flow: row wrap;
+}
+%d-flex-c-nw {
+  display: flex;
+  flex-flow: column nowrap;
+}
+%d-flex-r-nw {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.tags-wrapper {
+  @extend %d-flex-r-w;
   justify-content: space-around;
 }
 .tag-wrapper {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+.hidden {
+  background-color: grey;
+}
+
+.reviews {
+  @extend %d-flex-r-w;
+  justify-content: space-around;
+}
+.reviews-heading {
+  width: 100vw;
+}
+.review {
+  @extend %d-flex-c-nw;
+  width: 30vw;
+  justify-content: space-evenly;
+}
+.review-header {
+  @extend %d-flex-r-nw;
+  justify-content: space-around;
+}
+.review-body {
+  @extend %d-flex-r-nw;
+  justify-content: space-around;
+}
+.buttons-container {
+  @extend %d-flex-r-nw;
+  justify-content: space-around;
+}
+.vote-content {
+  @extend %d-flex-r-nw;
+  justify-content: space-evenly;
+  align-content: center;
 }
