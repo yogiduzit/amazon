@@ -39,6 +39,9 @@ gem 'faker'
 gem 'cancancan'
 gem 'bootstrap', '~> 4.3.1'
 gem 'jquery-rails'
+gem 'delayed_job_active_record'
+gem 'delayed_job_web'
+gem 'letter_opener'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
