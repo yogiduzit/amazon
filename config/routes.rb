@@ -34,9 +34,13 @@ Rails.application.routes.draw do
   # Delete a product
   delete '/products/:id', {to: 'products#delete'}
 
+  post '/products/:product_id/reviews/:review_id/votes/:type', {to: 'votes#create'}
+  patch '/products/:product_id/reviews/:review_id/votes/:id/:type', {to: 'votes#update'}
+
   resources :products do 
     resources :reviews, only: [:create, :destroy] do
       resources :likes, only: [:create, :destroy]
+      resources :votes, only: [:create, :update]
     end
     resources :favourites, only: [:create, :destroy]
   end
