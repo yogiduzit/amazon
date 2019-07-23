@@ -68,12 +68,12 @@
         </div>
         <div class="buttons-container">
         <% if can?(:crud, review) %>
-          <%= link_to("Delete", product_review_path(@product, review), method: :delete, data: {confirm: "Are you sure ?"})%>
+          <%= link_to("Delete", product_review_path(@product, review), method: :delete,class: "btn btn-secondary", data: {confirm: "Are you sure ?"})%>
         <% end %>
 
         <% if can?(:crud, @product)%> 
-          <%= link_to("Hide", product_review_path(@product, review) + "/toggle", method: :patch) if !review.hidden%>
-          <%= link_to("Unhide", product_review_path(@product, review) + "/toggle", method: :patch) if review.hidden%>
+          <%= link_to("Hide", product_review_path(@product, review) + "/toggle", method: :patch, class: "btn btn-secondary") if !review.hidden%>
+          <%= link_to("Unhide", product_review_path(@product, review) + "/toggle", class: "btn btn-secondary", method: :patch) if review.hidden%>
           
         <% end %>
 
