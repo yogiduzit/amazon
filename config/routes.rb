@@ -56,6 +56,13 @@ Rails.application.routes.draw do
 
   patch '/products/:product_id/reviews/:id/toggle', {to: 'reviews#toggle'}
 
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do 
+      resources :products
+      resource :sessions
+    end
+  end
+
   match("/delayed_jobs", 
     to: DelayedJobWeb,
     anchor: false,

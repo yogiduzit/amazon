@@ -42,6 +42,7 @@ gem 'jquery-rails'
 gem 'delayed_job_active_record'
 gem 'delayed_job_web'
 gem 'letter_opener'
+gem 'active_model_serializers', require: true
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

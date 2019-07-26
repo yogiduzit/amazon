@@ -46,6 +46,10 @@ class User < ApplicationRecord
     where("created_at > ? AND created_at < ?", "#{date1}", "#{date2}")
   });
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   VALID_EMAIL_REGEX = /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
   validates :email, presence: true, uniqueness: true, format: VALID_EMAIL_REGEX 
